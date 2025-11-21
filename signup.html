@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Registrasi</title>
+    <link rel="stylesheet" href="signup.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="registration-container">
+        <form class="registration-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Pilih Role</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            
+            <button type="button" class="btn-registrasi" onclick="redirectToLogin()">Registrasi</button>
+        </form>
+    </div>
+
+    <script>
+    function redirectToLogin() {
+        const email = document.getElementById("email").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const role = document.getElementById("role").value;
+
+        if (!email || !username || !password || !role) {
+            alert("Semua field harus diisi!");
+            return;
+        }
+
+        // Simpan data ke localStorage
+        const userData = {
+            email: email,
+            username: username,
+            password: password,
+            role: role
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        alert("Registrasi berhasil! Anda akan diarahkan ke halaman Login.");
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>

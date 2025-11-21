@@ -1,0 +1,52 @@
+body {
+    font-family: 'Quicksand', sans-serif;;
+    margin: 0;
+    padding: 0;
+    background-color: #FFEFEF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+.logo {
+    width: 250px;
+    position: absolute;
+    top: 0px;        /* jarak dari atas */
+    left: 50%;
+    transform: translateX(-50%);  
+}
+
+
+.title {
+    font-size: 40px;
+    color: #FF8BA0;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.btn-login {
+    display: inline-block;
+    padding: 12px 40px;
+    background-color: #FF9BB7;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #ff7fa3;
+}

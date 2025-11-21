@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>PawPaw - Diskusi</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="navbar-center">
+        <img src="PawPaw pink (1).png" class="logo">
+    </div>
+
+    <div class="navbar-right"></div>
+
+</header>
+
+<nav class="menu">
+    <a href="home.html">Home</a>
+    <a href="galeri.html">Galeri</a>
+    <a class="active" href="diskusi.html">Diskusi</a>
+    <a href="berita.html">Berita</a>
+    <a href="donasi.html">Donasi</a>
+</nav>
+
+<section class="diskusi-wrapper">
+
+    <h2>Forum Diskusi</h2>
+
+    <textarea id="postText" placeholder="Mulai diskusi..."></textarea>
+    <button class="btn" onclick="postingDiskusi()">Posting</button>
+
+    <div id="diskusi-list"></div>
+
+</section>
+
+<script src="main.js"></script>
+</body>
+</html>

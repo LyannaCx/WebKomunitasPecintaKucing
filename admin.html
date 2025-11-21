@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PawPaw Dashboard Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: #ccddf9;
+        margin: 20px auto;
+        max-width: 960px;
+        padding: 0 20px 40px 20px;
+    }
+    header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    header img {
+        width: 200px;
+        margin-right: 10px;
+    }
+    header p {
+        font-weight: 700; 
+        font-size: 30px;
+        color: #7ca2f9; 
+        margin: 0;
+    }
+
+    section {
+        background: #b5c9f7;
+        border-radius: 8px;
+        padding: 15px 20px 25px 20px;
+        margin-bottom: 30px;
+    }
+    section h2 {
+        font-weight: 700;
+        color: #587adb;
+        margin-top: 0;
+        margin-bottom: 18px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-weight: 600;
+        background-color: #d6defa;
+    }
+    table th, table td {
+        border: 1px solid #9bade8;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    table th {
+        background-color: #a5b8f5;
+    }
+
+    button {
+        font-weight: 600;
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        color: white;
+    }
+    .hapus {
+        background-color: #e34a4a;
+    }
+    .hapus:hover {
+        background-color: #b63434;
+    }
+    .blokir {
+        background-color: #f18f57;
+    }
+    .blokir:hover {
+        background-color: #c56c3b;
+    }
+    .upload {
+        background-color: #5d8bf4;
+        margin-top: 8px;
+        width: 120px;
+        padding: 7px 0;
+    }
+    .upload:hover {
+        background-color: #3c66dc;
+    }
+
+    input[type="text"], input[type="url"] {
+        box-sizing: border-box;
+        width: 100%;
+        font-weight: 600;
+        padding: 8px 10px;
+        margin-bottom: 8px;
+        border: none;
+        border-radius: 6px;
+    }
+    input::placeholder {
+        font-weight: 400;
+    }
+
+    /* Initially hidden: Manajemen Posting */
+    #manajemen-posting {
+        display: none;
+    }
+    </style>
+    </head>
+    <body>
+
+    <header>
+    <img src="PawPaw.png" alt="PawPaw Logo"/>
+    <div>
+        <p>Dashboard Admin</p>
+    </div>
+    </header>
+
+    <!-- Manajemen Posting -->
+    <section id="manajemen-posting">
+    <h2>Manajemen Posting</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Judul postingan</th>
+            <th>Username</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody id="posting-tbody">
+        <!-- Postingan dari user akan muncul disini -->
+        </tbody>
+    </table>
+    </section>
+
+    <!-- Tambahkan Berita -->
+    <section id="tambahkan-berita">
+    <h2>Tambahkan Berita</h2>
+    <input type="text" id="judul-berita" placeholder="Judul berita" />
+    <input type="url" id="link-berita" placeholder="Link Berita" />
+    <button class="upload" id="upload-berita">Upload</button>
+    </section>
+
+    <!-- Laporan Donasi -->
+    <section id="laporan-donasi">
+    <h2>Laporan Donasi</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Jumlah Donasi</th>
+        </tr>
+        </thead>
+        <tbody id="donasi-tbody">
+        <!-- Laporan donasi masuk disini -->
+        </tbody>
+    </table>
+    </section>
+
+    <!-- Manajemen Pengguna -->
+    <section id="manajemen-pengguna">
+    <h2>Manajemen Pengguna</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Status akun</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody id="pengguna-tbody">
+        <!-- Data pengguna masuk disini -->
+        </tbody>
+    </table>
+    </section>
+
+    <script>
+    // Gunakan localStorage untuk komunikasi data antara dashboard admin dan dashboard user
+    // Keys lokalstorage:
+    // 'pawpaw_posts' - array objek {title, username}
+    // 'pawpaw_news' - array objek {title, url}
+    // 'pawpaw_donations' - array objek {username, amount}
+    // 'pawpaw_users' - array objek {username, status}, status = "Aktif" | "Diblokir"
+
+    // Ambil data dari localStorage (atau default array kosong)
+    function getData(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : [];
+    }
+    // Simpan data ke localStorage
+    function setData(key, val) {
+        localStorage.setItem(key, JSON.stringify(val));
+    }
+
+    // Format Rupiah
+    function formatRp(amount) {
+        if (typeof amount !== "number") amount = Number(amount);
+        return "Rp" + amount.toLocaleString('id-ID');
+    }
+
+    // === RENDER FUNCTIONS ===
+
+    // Render Postingan User
+    function renderPostings() {
+        const postings = getData('pawpaw_posts');
+        const tbody = document.getElementById('posting-tbody');
+        if(postings.length === 0) {
+        // Hide section if no posts
+        document.getElementById('manajemen-posting').style.display = 'none';
+        tbody.innerHTML = "";
+        return;
+        }
+        document.getElementById('manajemen-posting').style.display = 'block'; // Show section if exists
+        tbody.innerHTML = ""; // clear first
+        postings.forEach((post, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${post.title}</td>
+            <td>${post.username}</td>
+            <td><button class="hapus" data-type="post" data-id="${idx}">Hapus</button></td>
+        `;
+        tbody.appendChild(tr);
+        });
+    }
+
+    // Render Berita
+    // Hanya menampilkan input berita di admin, berita ditampilkan di dashboard user saja.
+
+    // Render Laporan Donasi
+    function renderDonasi() {
+        const donasi = getData('pawpaw_donations');
+        const tbody = document.getElementById('donasi-tbody');
+        if(donasi.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; font-weight:normal; color:#555;">Belum ada donasi</td></tr>';
+        return;
+        }
+        tbody.innerHTML = "";
+        donasi.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${d.username}</td>
+            <td>${formatRp(d.amount)}</td>
+        `;
+        tbody.appendChild(tr);
+        });
+    }
+
+    // Render Manajemen Pengguna
+    function renderUsers() {
+        const users = getData('pawpaw_users');
+        const tbody = document.getElementById('pengguna-tbody');
+        if(users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; font-weight:normal; color:#555;">Belum ada pengguna</td></tr>';
+        return;
+        }
+        tbody.innerHTML = "";
+        users.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.status}</td>
+            <td>
+            <button class="hapus" data-type="user" data-username="${user.username}">Hapus</button>
+            <button class="blokir" data-username="${user.username}">${user.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        });
+    }
+
+    // === ACTION HANDLERS ===
+
+    // Hapus post atau user (delegation)
+    document.body.addEventListener('click', e => {
+        // Hapus posting
+        if(e.target.classList.contains('hapus')) {
+        const type = e.target.getAttribute('data-type');
+        if(type === 'post') {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            if(!isNaN(id)) {
+            let postings = getData('pawpaw_posts');
+            postings.splice(id, 1);
+            setData('pawpaw_posts', postings);
+            renderPostings();
+            alert("Postingan berhasil dihapus.");
+            }
+        } else if(type === 'user') {
+            const username = e.target.getAttribute('data-username');
+            if(username) {
+            if(confirm(`Yakin ingin menghapus pengguna "${username}"?`)) {
+                let users = getData('pawpaw_users');
+                users = users.filter(u => u.username !== username);
+                setData('pawpaw_users', users);
+
+                // Hapus postingan yang dibuat user ini (jika ada)
+                let postings = getData('pawpaw_posts');
+                postings = postings.filter(post => post.username !== username);
+                setData('pawpaw_posts', postings);
+
+                renderUsers();
+                renderPostings();
+                alert(`Pengguna "${username}" sudah dihapus.`);
+            }
+            }
+        }
+        }
+        // Blokir/aktifkan user
+        else if(e.target.classList.contains('blokir')) {
+        const username = e.target.getAttribute('data-username');
+        if(username) {
+            let users = getData('pawpaw_users');
+            const idx = users.findIndex(u => u.username === username);
+            if(idx !== -1) {
+            if(users[idx].status === "Aktif") {
+                if(confirm(`Apakah Anda ingin memblokir pengguna "${username}"?`)) {
+                users[idx].status = "Diblokir";
+                alert(`Pengguna "${username}" telah diblokir.`);
+                }
+            } else {
+                if(confirm(`Apakah Anda ingin mengaktifkan kembali pengguna "${username}"?`)) {
+                users[idx].status = "Aktif";
+                alert(`Pengguna "${username}" telah diaktifkan kembali.`);
+                }
+            }
+            setData('pawpaw_users', users);
+            renderUsers();
+            }
+        }
+        }
+    });
+
+    // Upload Berita Baru
+    document.getElementById('upload-berita').addEventListener('click', () => {
+        const judul = document.getElementById('judul-berita').value.trim();
+        const link = document.getElementById('link-berita').value.trim();
+
+        if(!judul) {
+        alert('Judul berita tidak boleh kosong.');
+        return;
+        }
+        if(!link) {
+        alert('Link berita tidak boleh kosong.');
+        return;
+        }
+        try {
+        new URL(link);
+        } catch {
+        alert('Link berita tidak valid.');
+        return;
+        }
+
+        // Simpan berita ke localStorage
+        let news = getData('pawpaw_news');
+        news.push({title: judul, url: link});
+        setData('pawpaw_news', news);
+        alert('Berita berhasil diupload. Berita ini akan muncul di dashboard user.');
+
+        // Kosongkan input
+        document.getElementById('judul-berita').value = '';
+        document.getElementById('link-berita').value = '';
+
+        // Berita ini disimpan di localStorage agar dashboard user dapat memuatnya
+    });
+
+    // ==== Inisialisasi render ====
+    renderPostings();
+    renderUsers();
+    renderDonasi();
+
+    /*
+    Catatan penting:
+
+    Karena dashboard admin dan dashboard user berjalan terpisah,
+    mereka disinkronkan dengan localStorage.
+
+    Dashboard user harus membaca localStorage dengan key:
+        - 'pawpaw_news' untuk menampilkan berita
+        - 'pawpaw_posts' untuk postingan yang diupload oleh user
+        - 'pawpaw_donations' untuk laporan donasi setelah user donasi
+        - 'pawpaw_users' untuk daftar signup pengguna
+
+    Dashboard user sering memanggil:
+        - setData('pawpaw_posts', [...]) setiap kali user upload postingan baru
+        - setData('pawpaw_donations', [...]) setelah donasi sukses
+        - setData('pawpaw_users', [...]) setelah sukses signup
+
+    Dashboard admin hanya membaca dan memanipulasi data di atas.
+    */
+
+    </script>
+</body>
+</html>

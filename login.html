@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PawPaw</title>
+
+    <!-- Font lucu seperti desain -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS terpisah -->
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo">
+            <img src="PawPaw pink (1).png" alt="PawPaw Logo">
+        </div>
+
+        <form onsubmit="return loginUser(event)" class="form-box">
+            <label>Nama Pengguna</label>
+            <input type="text" id="username" required>
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>Password</label>
+            <input type="password" id="password" required>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+
+
+        <div class="register-text">
+            Belum punya akun? <a href="signup.html">registrasi</a>
+        </div>
+    </div>
+
+    <script>
+        function loginUser(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // Ambil data user dari localStorage
+            const savedUser = JSON.parse(localStorage.getItem("user"));
+
+            if (!savedUser) {
+                alert("Akun belum terdaftar!");
+                return;
+            }
+
+            // Validasi login
+            if (
+            username === savedUser.username &&
+            email === savedUser.email &&
+            password === savedUser.password
+        ) {
+            // SIMPAN USERNAME KE LOCALSTORAGE
+            localStorage.setItem("username", savedUser.username);
+
+            if (savedUser.role === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "home.html";
+            }
+            } else {
+                alert("Email, username, atau password salah!");
+            }
+        }
+
+            
+    </script>
+
+
+</body>
+</html>

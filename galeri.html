@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>PawPaw - Galeri</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="navbar-center">
+        <img src="PawPaw pink (1).png" class="logo">
+    </div>
+
+    <div class="navbar-right"></div>
+
+</header>
+
+<nav class="menu">
+    <a href="home.html">Home</a>
+    <a class="active" href="galeri.html">Galeri</a>
+    <a href="diskusi.html">Diskusi</a>
+    <a href="berita.html">Berita</a>
+    <a href="donasi.html">Donasi</a>
+</nav>
+
+<section class="galeri-container">
+
+    <h2>Galeri Foto Kucing</h2>
+
+    <div class="upload-box">
+
+        <!-- HARUS id="uploadImage" supaya cocok dengan JS -->
+        <input type="file" id="uploadImage" accept="image/*" style="display:none;">
+
+        <label for="uploadImage" class="btn-file">Pilih Foto</label>
+
+        <button class="btn" onclick="uploadFoto()">Upload</button>
+    </div>
+
+    <!-- WAJIB ADA ID INI! -->
+    <div id="galeriList" class="galeri-grid"></div>
+
+</section>
+
+<script src="main.js"></script>
+</body>
+</html>

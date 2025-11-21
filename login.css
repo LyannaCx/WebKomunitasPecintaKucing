@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    background-color: #FFF3F4; /* pink pastel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background: white;
+    width: 380px;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.logo img {
+    width: 100px;
+}
+
+/* Kotak form — mengatur lebar keseluruhan */
+.form-box {
+    width: 80%;               /* Kamu bebas ubah 60–75% */
+    max-width: 500px;
+    margin-bottom: 18px;
+    margin-left: 20px;
+}
+
+/* Label biar font-nya seragam */
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+/* Input lebih kecil, sama seperti tombol */
+input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    background: #DDDDDD;
+    margin-bottom: 18px;
+    font-size: 15px;
+}
+
+/* Tombol, ukurannya mengikuti container (sama seperti input) */
+.btn-login {
+    width: 110%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background-color: #FFB6C1;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background-color: #f44a7a;
+}
+
+.register-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.register-text a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+}
